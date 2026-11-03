@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../schemas/scenario.schema.json
+scenario: pandemia
+version: 1
+description: Desabastecimiento gradual de medicinas e insumos durante una pandemia.
+indicators:
+  - {
+      id: incidencia_100k,
+      label: Casos por 100 mil hab.,
+      weight: 0.40,
+      normalize: log,
+      direction: higher_worse,
+    }
+  - {
+      id: crecimiento_7d,
+      label: Crecimiento de casos a 7 días,
+      weight: 0.25,
+      normalize: minmax,
+      direction: higher_worse,
+    }
+  - {
+      id: ocupacion_uci,
+      label: Ocupación UCI,
+      weight: 0.20,
+      normalize: minmax,
+      direction: higher_worse,
+    }
+  - {
+      id: nivel_alerta,
+      label: Nivel de alerta MINSA (1 extremo … 4 moderado),
+      weight: 0.15,
+      normalize: thresholds,
+      levels: [1, 2, 3, 4],
+      direction: lower_worse,
+    }
+aggregation: { method: weighted_sum }
+time_penalty: { shape: linear }

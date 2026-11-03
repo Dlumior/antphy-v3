@@ -1,0 +1,16 @@
+\chapter{Algoritmo}\label{cap:algoritmo}
+
+\begin{algorithm}[ht]
+  \caption{Esquema del ACO MAX-MIN con búsqueda local}\label{alg:mmas}
+  \KwIn{instancia, parámetros $\alpha, \beta, \rho$, semilla}
+  \KwOut{mejor solución $s^*$ y archivo de Pareto}
+  inicializar feromonas en $\tau_{\max}$\;
+  \While{no se cumpla el criterio de parada}{
+    \ForEach{hormiga (en paralelo)}{construir una solución factible}
+    aplicar búsqueda local a la mejor de la iteración\;
+    actualizar $s^*$ y el archivo de Pareto\;
+    evaporar y depositar feromona; acotar en $[\tau_{\min}, \tau_{\max}]$\;
+  }
+\end{algorithm}
+
+\todo{regla de transición, heurística con urgencia, vecindarios de búsqueda local}

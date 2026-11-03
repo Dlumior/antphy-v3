@@ -1,0 +1,36 @@
+name: infra
+
+on:
+  push:
+    branches: [main]
+    paths: ["infra/**", ".github/workflows/infra.yml"]
+  pull_request:
+    paths: ["infra/**", ".github/workflows/infra.yml"]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        dir: [global, envs/dev, envs/staging, envs/prod]
+    defaults:
+      run:
+        working-directory: infra/terraform/${{ matrix.dir }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.10"
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false
+      - run: terraform validate
+
+  compose:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f infra/compose/compose.yaml --profile app --profile osrm config -q
+      - name: Construir imágenes
+        run: |
+          docker build -f infra/docker/services.Dockerfile --target api -t antphy-api .
+          docker build -f infra/docker/services.Dockerfile --target worker -t antphy-worker .

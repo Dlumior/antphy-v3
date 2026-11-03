@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Dlumior/antphy-v3/contracts/schemas/solution.schema.json",
+  "title": "Solución de ruteo",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "instance",
+    "solver",
+    "routes",
+    "unserved",
+    "objectives",
+    "feasible"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1" },
+    "instance": { "type": "string" },
+    "solver": { "type": "string" },
+    "seed": { "type": "integer", "minimum": 0 },
+    "feasible": { "type": "boolean" },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["vehicle", "stops", "load", "distance_m", "duration_s"],
+        "additionalProperties": false,
+        "properties": {
+          "vehicle": { "type": "string" },
+          "stops": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Ids visitados, sin incluir el almacén."
+          },
+          "load": { "type": "number" },
+          "distance_m": { "type": "number" },
+          "duration_s": { "type": "number", "description": "Incluye el regreso al almacén." }
+        }
+      }
+    },
+    "unserved": { "type": "array", "items": { "type": "string" } },
+    "objectives": {
+      "type": "object",
+      "required": ["distance_m", "makespan_s", "urgency_penalty"],
+      "additionalProperties": false,
+      "properties": {
+        "distance_m": { "type": "number" },
+        "makespan_s": { "type": "number" },
+        "urgency_penalty": { "type": "number", "description": "∑ u_i · t_i (t_i en horas)." }
+      }
+    }
+  }
+}

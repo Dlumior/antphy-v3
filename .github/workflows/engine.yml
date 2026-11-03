@@ -1,0 +1,37 @@
+name: engine
+
+on:
+  push:
+    branches: [main]
+    paths: ["engine/**", "contracts/**", ".clang-format", ".github/workflows/engine.yml"]
+  pull_request:
+    paths: ["engine/**", "contracts/**", ".clang-format", ".github/workflows/engine.yml"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: ${{ matrix.preset }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [debug, release, sanitize, clang]
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencias
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libc++-18-dev libc++abi-18-dev
+      - run: cmake --preset ${{ matrix.preset }}
+      - run: cmake --build --preset ${{ matrix.preset }}
+      - run: ctest --preset ${{ matrix.preset }}
+
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: find engine/include engine/src engine/cli engine/tests -name '*.?pp' | xargs clang-format-18 --dry-run -Werror

@@ -1,0 +1,14 @@
+\chapter{Modelo del problema}\label{cap:modelo}
+
+Sea $\Nodes$ el conjunto de puntos de atención, $0$ el almacén y $\Fleet$ la flota. Cada
+vehículo $k \in \Fleet$ tiene capacidad $Q_k$ y duración máxima $D_k$. Se busca un conjunto de
+rutas que minimice
+\begin{equation}
+  F = w_c \hat{C} + w_t \hat{T} + w_u \hat{U},
+  \qquad
+  U = \sum_{i \in \Nodes} \urg{i}\, \pen(\arr{i}),
+  \label{eq:objetivo}
+\end{equation}
+donde $\hat{\cdot}$ indica normalización respecto de una solución de referencia.
+
+\todo{restricciones completas, atención parcial y penalización de no atendidos}

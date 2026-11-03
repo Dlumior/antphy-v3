@@ -1,0 +1,49 @@
+name: clients-docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      [
+        "clients/**",
+        "docs/**",
+        "contracts/**",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "pnpm-lock.yaml",
+        "vite.config.ts",
+        ".github/workflows/clients.yml",
+      ]
+  pull_request:
+    paths:
+      [
+        "clients/**",
+        "docs/**",
+        "contracts/**",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "pnpm-lock.yaml",
+        "vite.config.ts",
+        ".github/workflows/clients.yml",
+      ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npx --yes --package=vite-plus@1.4.0 vp install --frozen-lockfile
+      - run: node_modules/.bin/vp check
+      - run: node_modules/.bin/vp run -r test
+      - run: node_modules/.bin/vp run -r build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-site
+          path: docs/dist

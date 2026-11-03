@@ -1,0 +1,52 @@
+# Entorno local. Desde la raíz:
+#   docker compose -f infra/compose/compose.yaml up -d                  # redis + postgres
+#   docker compose -f infra/compose/compose.yaml --profile app up -d    # + api + worker
+#   docker compose -f infra/compose/compose.yaml --profile osrm up -d   # + OSRM (ver tools/osrm-prepare.sh)
+name: antphy
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: antphy
+      POSTGRES_PASSWORD: antphy
+      POSTGRES_DB: antphy
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U antphy"]
+      interval: 5s
+
+  api:
+    profiles: [app]
+    build: { context: ../.., dockerfile: infra/docker/services.Dockerfile, target: api }
+    environment:
+      ANTPHY_ENV: local
+      ANTPHY_REDIS_URL: redis://redis:6379/0
+    ports: ["8000:8000"]
+    depends_on: { redis: { condition: service_healthy } }
+
+  worker:
+    profiles: [app]
+    build: { context: ../.., dockerfile: infra/docker/services.Dockerfile, target: worker }
+    environment:
+      ANTPHY_ENV: local
+      ANTPHY_REDIS_URL: redis://redis:6379/0
+    depends_on: { redis: { condition: service_healthy } }
+
+  osrm:
+    profiles: [osrm]
+    image: ghcr.io/project-osrm/osrm-backend:v5.27.1
+    command: osrm-routed --algorithm mld /data/peru-latest.osrm
+    volumes: ["./osrm-data:/data"]
+    ports: ["5000:5000"]
+
+volumes:
+  pgdata:

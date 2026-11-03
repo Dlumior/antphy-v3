@@ -1,0 +1,22 @@
+{
+  "name": "@antphy/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cliente tipado de la API, generado desde contracts/openapi/openapi.json",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "pnpm --package=openapi-typescript@7.13.0 --package=typescript@5.9.3 dlx openapi-typescript ../../../contracts/openapi/openapi.json -o src/schema.d.ts",
+    "test": "vp test",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schemas/scenario.schema.json
+scenario: nino_inundacion
+version: 1
+description: Inundaciones por Fenómeno El Niño; agua potable y medicinas antes de que suba el riesgo sanitario.
+indicators:
+  - { id: familias_afectadas, weight: 0.35, normalize: log, direction: higher_worse }
+  - { id: nivel_agua_m, weight: 0.25, normalize: minmax, direction: higher_worse }
+  - {
+      id: riesgo_dengue,
+      weight: 0.20,
+      normalize: thresholds,
+      levels: [0, 1, 2, 3],
+      direction: higher_worse,
+    }
+  - {
+      id: acceso_vial,
+      weight: 0.20,
+      normalize: thresholds,
+      levels: [0, 0.5, 1],
+      direction: lower_worse,
+    }
+aggregation: { method: weighted_sum }
+time_penalty: { shape: deadline, deadline_hours: 48 }

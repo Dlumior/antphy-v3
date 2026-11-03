@@ -1,0 +1,19 @@
+\chapter{Modelo de urgencia por escenario}\label{cap:urgencia}
+
+La severidad $\urg{i} \in [0,1]$ resulta de normalizar y agregar los indicadores del
+escenario; la forma $\pen$ describe cómo crece el daño con la espera, en línea con el costo
+de privación \parencite{holguinveras2013}.
+
+\begin{table}[ht]
+  \centering
+  \caption{Formas temporales de la penalización.}\label{tab:formas}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Forma & $\pen(t)$ & Escenario típico \\
+    \midrule
+    Lineal & $t$ & Pandemia \\
+    Horas doradas & $1 - e^{-\lambda t}$ & Terremoto \\
+    Plazo límite & $\max(0,\, t - d)$ & Inundación \\
+    \bottomrule
+  \end{tabular}
+\end{table}

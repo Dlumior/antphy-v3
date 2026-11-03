@@ -1,0 +1,33 @@
+name: services
+
+on:
+  push:
+    branches: [main]
+    paths: ["services/**", "contracts/**", "engine/**", ".github/workflows/services.yml"]
+  pull_request:
+    paths: ["services/**", "contracts/**", "engine/**", ".github/workflows/services.yml"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Compilar el motor (para la prueba de punta a punta)
+        working-directory: engine
+        run: sudo apt-get install -y ninja-build && cmake --preset release -DANTPHY_BUILD_TESTS=OFF && cmake --build --preset release
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy
+      - run: uv run lint-imports
+      - run: uv run pytest

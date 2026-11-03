@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../schemas/scenario.schema.json
+scenario: terremoto
+version: 1
+description: Respuesta en las primeras 72 horas; la supervivencia de atrapados cae rápido.
+indicators:
+  - { id: heridos, weight: 0.35, normalize: log, direction: higher_worse }
+  - { id: viviendas_colapsadas, weight: 0.25, normalize: minmax, direction: higher_worse }
+  - { id: poblacion, weight: 0.15, normalize: log, direction: higher_worse }
+  - {
+      id: acceso_vial,
+      label: Fracción de vías operativas,
+      weight: 0.25,
+      normalize: thresholds,
+      levels: [0, 0.5, 1],
+      direction: lower_worse,
+    }
+aggregation:
+  method: weighted_sum
+  critical_floor: { indicator: heridos, above: 50, min_urgency: 0.8 }
+time_penalty: { shape: golden_hours, lambda_per_hour: 0.05 }

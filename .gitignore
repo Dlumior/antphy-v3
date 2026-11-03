@@ -1,0 +1,58 @@
+# --- General
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# --- C++
+engine/build/
+build/
+compile_commands.json
+.cache/
+
+# --- Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+
+# --- JS
+node_modules/
+.astro/
+dist-ssr/
+*.local
+coverage/
+
+# --- Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+!.terraform.lock.hcl
+
+# --- LaTeX
+report/build/
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# --- Datos pesados (OSRM, experimentos)
+infra/compose/osrm-data/
+engine/experiments/results/

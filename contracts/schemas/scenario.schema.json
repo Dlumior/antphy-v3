@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Dlumior/antphy-v3/contracts/schemas/scenario.schema.json",
+  "title": "Escenario de urgencia",
+  "description": "Define cómo convertir indicadores crudos en una severidad u_i ∈ [0,1] y cómo crece la penalización con el tiempo de espera.",
+  "type": "object",
+  "required": ["scenario", "version", "indicators", "aggregation", "time_penalty"],
+  "additionalProperties": false,
+  "properties": {
+    "scenario": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "description": { "type": "string" },
+    "indicators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "weight", "normalize", "direction"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "normalize": { "enum": ["minmax", "log", "thresholds"] },
+          "levels": { "type": "array", "items": { "type": "number" } },
+          "direction": { "enum": ["higher_worse", "lower_worse"] }
+        }
+      }
+    },
+    "aggregation": {
+      "type": "object",
+      "required": ["method"],
+      "additionalProperties": false,
+      "properties": {
+        "method": { "enum": ["weighted_sum", "weighted_geometric"] },
+        "critical_floor": {
+          "type": "object",
+          "required": ["indicator", "above", "min_urgency"],
+          "additionalProperties": false,
+          "properties": {
+            "indicator": { "type": "string" },
+            "above": { "type": "number" },
+            "min_urgency": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "time_penalty": {
+      "type": "object",
+      "required": ["shape"],
+      "additionalProperties": false,
+      "properties": {
+        "shape": { "enum": ["linear", "golden_hours", "deadline"] },
+        "lambda_per_hour": { "type": "number", "exclusiveMinimum": 0 },
+        "deadline_hours": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    }
+  }
+}

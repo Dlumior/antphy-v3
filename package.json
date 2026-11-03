@@ -1,0 +1,25 @@
+{
+  "name": "antphy-v3",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Workspace JS de antphy-v3: clientes (Vite+) y documentación (Astro Starlight)",
+  "type": "module",
+  "scripts": {
+    "ready": "vp check && vp run -r test && vp run -r build",
+    "dev:web": "vp run web#dev",
+    "dev:docs": "vp run docs#dev"
+  },
+  "devDependencies": {
+    "vite-plus": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.16.1",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=24.11.0"
+  }
+}

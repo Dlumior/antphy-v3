@@ -1,0 +1,48 @@
+\documentclass[11pt,a4paper,oneside]{report}
+
+% --- Idioma y tipografía -------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=2.5cm]{geometry}
+
+% --- Matemática, algoritmos, tablas y figuras -----------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[ruled,vlined,linesnumbered,spanish,onelanguage]{algorithm2e}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage[locale=FR]{siunitx}
+
+% --- Referencias -----------------------------------------------------------------
+\usepackage[backend=biber,style=apa]{biblatex}
+\addbibresource{references.bib}
+\usepackage[hidelinks]{hyperref}
+\usepackage[spanish,noabbrev]{cleveref}
+
+\input{macros}
+
+\title{antphy-v3: ruteo humanitario con colonia de hormigas\\[0.5em]
+  \large Informe técnico del algoritmo}
+\author{Luis Denilson Ramirez Osorio}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+  \input{chapters/00-resumen}
+\end{abstract}
+
+\tableofcontents
+
+\input{chapters/01-introduccion}
+\input{chapters/02-modelo}
+\input{chapters/03-urgencia}
+\input{chapters/04-algoritmo}
+\input{chapters/05-experimentos}
+\input{chapters/06-conclusiones}
+
+\printbibliography[heading=bibintoc,title={Referencias}]
+\end{document}

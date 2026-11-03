@@ -1,0 +1,32 @@
+---
+title: antphy-v3
+description: Motor de ruteo para ayuda humanitaria basado en colonia de hormigas.
+template: splash
+hero:
+  tagline: Rutas de abastecimiento que priorizan a quien más lo necesita, para cualquier tipo de desastre.
+  actions:
+    - text: Primeros pasos
+      link: /antphy-v3/guias/primeros-pasos/
+      icon: right-arrow
+    - text: Ver en GitHub
+      link: https://github.com/Dlumior/antphy-v3
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+<CardGrid>
+  <Card title="Escenarios configurables" icon="setting">
+    Pandemia, terremoto, Fenómeno El Niño, huaico… Cada escenario define cómo se calcula la urgencia
+    y cómo crece el daño mientras se espera.
+  </Card>
+  <Card title="Motor en C++" icon="rocket">
+    ACO MAX-MIN con búsqueda local, validación estricta y resultados reproducibles.
+  </Card>
+  <Card title="API y worker" icon="seti:python">
+    FastAPI encola los trabajos; un worker con Dramatiq y Redis ejecuta el motor.
+  </Card>
+  <Card title="Dashboard" icon="laptop">
+    React con Vite+: configurar el escenario, resolver y comparar soluciones.
+  </Card>
+</CardGrid>
