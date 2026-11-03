@@ -3,6 +3,7 @@
 
 set dotenv-load := false
 
+# La vp global solo instala dependencias; todo lo demás usa la del proyecto.
 vp := "node_modules/.bin/vp"
 compose := "docker compose -f infra/compose/compose.yaml"
 
@@ -12,7 +13,8 @@ default:
 # Instala dependencias de Python y JS
 setup:
     cd services && uv sync
-    npx --yes --package=vite-plus@1.4.0 vp install
+    command -v vp >/dev/null || (cd /tmp && npm install -g vite-plus@1.4.0)
+    vp install
 
 # --- engine -----------------------------------------------------------------
 
@@ -69,7 +71,7 @@ docs:
 
 # Formato, lint, tipos, pruebas y build de todo el workspace JS
 js-check:
-    {{vp}} check && {{vp}} run -r test && {{vp}} run -r build
+    {{vp}} run docs#sync && {{vp}} check && {{vp}} run -r test && {{vp}} run -r build
 
 # --- infra ------------------------------------------------------------------
 
