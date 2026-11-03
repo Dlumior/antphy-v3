@@ -36,12 +36,15 @@ jobs:
       - name: Motor
         working-directory: engine
         run: sudo apt-get install -y ninja-build && cmake --preset release -DANTPHY_BUILD_TESTS=OFF && cmake --build --preset release
+      - name: Instalar Vite+
+        working-directory: ${{ runner.temp }}
+        run: npm install -g vite-plus@1.4.0
       - name: Escenarios, ejemplos y salida del motor contra los esquemas
         run: uv run --project services python tools/check_contracts.py engine/build/release/antphy-solve
       - name: OpenAPI y cliente TypeScript al día
         run: |
           (cd services && ANTPHY_ENV=test uv run python -m antphy_services.apps.api.openapi ../contracts/openapi/openapi.json)
-          npx --yes --package=vite-plus@1.4.0 vp install
+          vp install --frozen-lockfile
           node_modules/.bin/vp run @antphy/api-client#generate
           git diff --exit-code -- contracts/openapi clients/packages/api-client/src/schema.d.ts \
             || (echo "::error::Ejecuta 'just openapi' y sube los cambios"; exit 1)

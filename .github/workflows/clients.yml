@@ -39,7 +39,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-      - run: npx --yes --package=vite-plus@1.4.0 vp install --frozen-lockfile
+      # Fuera del repo: npm ≥ 11 rechaza npx aquí porque devEngines declara pnpm.
+      - name: Instalar Vite+
+        working-directory: ${{ runner.temp }}
+        run: npm install -g vite-plus@1.4.0
+      # La vp global solo instala; el resto usa la del proyecto (si no, Vitest carga dos copias).
+      - run: vp install --frozen-lockfile
       - run: node_modules/.bin/vp check
       - run: node_modules/.bin/vp run -r test
       - run: node_modules/.bin/vp run -r build
