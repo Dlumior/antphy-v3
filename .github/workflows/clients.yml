@@ -45,6 +45,8 @@ jobs:
         run: npm install -g vite-plus@1.4.0
       # La vp global solo instala; el resto usa la del proyecto (si no, Vitest carga dos copias).
       - run: vp install --frozen-lockfile
+      - name: Tipos de Astro (necesarios para el type-check de docs)
+        run: node_modules/.bin/vp run docs#sync
       - run: node_modules/.bin/vp check
       - run: node_modules/.bin/vp run -r test
       - run: node_modules/.bin/vp run -r build

@@ -71,7 +71,7 @@ docs:
 
 # Formato, lint, tipos, pruebas y build de todo el workspace JS
 js-check:
-    {{vp}} check && {{vp}} run -r test && {{vp}} run -r build
+    {{vp}} run docs#sync && {{vp}} check && {{vp}} run -r test && {{vp}} run -r build
 
 # --- infra ------------------------------------------------------------------
 
